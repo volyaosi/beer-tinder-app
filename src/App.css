@@ -1,0 +1,75 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-image: linear-gradient(to right bottom,
+      #cf81e0,
+      #b862e7,
+      #914ee7,
+      #886ee9,
+      #4b5fa7);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-size: 16px;
+}
+
+.beer-list__header {
+  text-align: center;
+  margin: 20px;
+  color: #56fae3;
+}
+
+.card {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.3);
+  background: #fff;
+  margin: 15px auto;
+  max-width: 500px;
+  padding: 20px 15px;
+}
+
+.card__image {
+  width: 100px;
+  height: 100px;
+}
+
+.card__content {
+  width: 70%;
+}
+
+.card__title {
+  font-family: sans-serif;
+  text-transform: uppercase;
+}
+
+.card__subtitle {
+  color: rgb(100, 100, 100);
+  font-size: 0.9rem;
+}
+
+.card__rating {
+  margin-top: 10px;
+}
+
+.card__rating span {
+  font-size: 1.5rem;
+}
+
+.card__rating input[type="radio"] {
+  display: none;
+}
+
+.star-active {
+  color: #eba70d;
+}
+
+.star-inactive {
+  color: #777;
+}
