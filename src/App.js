@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import "./App.css";
 
-import BeerCard from "./components/BeerCard.js";
+import BeerCard from "./components/BeerCard/BeerCard";
 import beerData from "./beerData.js";
+
+const MAX_RATING = 5;
+
+const getAvg = (ratings) => ratings.reduce((a, b) => a + b) / ratings.length;
 
 class App extends Component {
   constructor() {
@@ -10,11 +14,9 @@ class App extends Component {
     this.state = {
       beerArr: beerData,
     };
-
-    this.handleRate = this.handleRate.bind(this);
   }
 
-  handleRate(id, newRate) {
+  handleRate = (id, newRate) => {
     this.setState((prevState) => {
       const updatedBeerArr = prevState.beerArr.map((beer) => {
         if (beer.id === id) {
@@ -29,18 +31,16 @@ class App extends Component {
 
   render() {
     const beerList = this.state.beerArr.map((beer) => {
-      const totalRating = beer.rating.reduce((sum, el) => sum + el, 0);
-      const beerQty = beer.rating.length;
-      const avrRating = beer.myRating
-        ? (totalRating + beer.myRating) / (beerQty + 1)
-        : totalRating / beerQty;
+      const {myRating, ratings} = beer;
+      const avgRating = getAvg(myRating ? [...ratings, myRating] : ratings)
 
       return (
         <BeerCard
           key={beer.id}
-          el={beer}
-          avrRating={avrRating.toFixed(2)}
+          {...beer}
+          avgRating={avgRating}
           handleRate={this.handleRate}
+          maxRating={MAX_RATING}
         />
       );
     });

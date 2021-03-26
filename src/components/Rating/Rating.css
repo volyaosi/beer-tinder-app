@@ -1,0 +1,17 @@
+.rating {
+    margin-top: 10px;
+}
+
+
+.rating__radio {
+    display: none;
+}
+
+.star {
+    font-size: 1.5rem;
+    color: #777;
+}
+
+.star_active {
+    color: #eba70d;
+}
