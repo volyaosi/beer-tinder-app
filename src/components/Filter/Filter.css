@@ -1,0 +1,9 @@
+.filter {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.filter__item {
+    margin-right: 5px;
+}
