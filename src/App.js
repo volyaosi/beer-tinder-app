@@ -1,16 +1,19 @@
 import React, { Component } from "react";
-import "./App.css";
+import cx from "classnames";
 
 import BeerCard from "./components/BeerCard/BeerCard";
 import { ViewControls } from "./components/ViewControls/ViewControls";
 import beerData from "./beerData.js";
 
+import "./App.css";
+
 const MAX_RATING = 5;
+const ITEMS_PER_PAGE = 3;
 const getAvg = (ratings) => ratings.reduce((a, b) => a + b) / ratings.length;
 const formatStr = (str) => str.toLowerCase().trim();
 
 // нужна помощь:
-//1. Куда оптимальнее вынести defaultFilter 
+//1. Куда оптимальнее вынести defaultFilter
 //2. Можно ли как-то упростить выбор уникальных стилей?
 const defaultFilter = beerData
   .map((item) => item.style)
@@ -18,7 +21,7 @@ const defaultFilter = beerData
   .reduce((obj, item) => ({ ...obj, [item]: false }), { all: true });
 
 //3. Куда оптимальнее вынести filterView
-const filterView = ({name, style}, filter, keyword) => {
+const filterView = ({ name, style }, filter, keyword) => {
   if (filter.all) {
     return formatStr(name).includes(keyword);
   }
@@ -28,7 +31,7 @@ const filterView = ({name, style}, filter, keyword) => {
       return formatStr(name).includes(keyword);
     }
   }
-}
+};
 
 class App extends Component {
   constructor() {
@@ -37,6 +40,7 @@ class App extends Component {
       beerArr: beerData,
       search: "",
       filter: defaultFilter,
+      lastItem: ITEMS_PER_PAGE,
     };
   }
 
@@ -54,6 +58,14 @@ class App extends Component {
   };
 
   handleSearch = (str) => this.setState({ search: formatStr(str) });
+  loadMoreItems = () => {
+    this.setState(({ lastItem }) => {
+      console.log(lastItem + ITEMS_PER_PAGE);
+      return {
+        lastItem: lastItem + ITEMS_PER_PAGE,
+      };
+    });
+  };
 
   handleFilter = ({ name, checked }) => {
     name === "all"
@@ -70,22 +82,24 @@ class App extends Component {
   };
 
   render() {
-    const beerList = this.state.beerArr
-      .filter((beer) => filterView(beer, this.state.filter, this.state.search))
-      .map((beer) => {
-        const { myRating, ratings } = beer;
-        const avgRating = getAvg(myRating ? [...ratings, myRating] : ratings);
+    const totalBeerList = this.state.beerArr.filter((beer) =>
+      filterView(beer, this.state.filter, this.state.search)
+    );
 
-        return (
-          <BeerCard
-            key={beer.id}
-            {...beer}
-            avgRating={avgRating}
-            handleRate={this.handleRate}
-            maxRating={MAX_RATING}
-          />
-        );
-      });
+    const beerList = totalBeerList.slice(0, this.state.lastItem).map((beer) => {
+      const { myRating, ratings } = beer;
+      const avgRating = getAvg(myRating ? [...ratings, myRating] : ratings);
+
+      return (
+        <BeerCard
+          key={beer.id}
+          {...beer}
+          avgRating={avgRating}
+          handleRate={this.handleRate}
+          maxRating={MAX_RATING}
+        />
+      );
+    });
 
     return (
       <main className="App">
@@ -95,7 +109,17 @@ class App extends Component {
           handleFilter={this.handleFilter}
           handleSearch={this.handleSearch}
         />
-        <div className="beer-list__container">{beerList}</div>
+        <div className="beer-list__container">
+          {beerList}
+          <button
+            onClick={this.loadMoreItems}
+            className={cx("loadBtn", {
+              loadBtn_hidden: this.state.lastItem >= totalBeerList.length
+            })}
+          >
+            Load more
+          </button>
+        </div>
       </main>
     );
   }
