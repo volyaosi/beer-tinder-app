@@ -10,12 +10,25 @@ const getAvg = (ratings) => ratings.reduce((a, b) => a + b) / ratings.length;
 const formatStr = (str) => str.toLowerCase().trim();
 
 // нужна помощь:
-//1. Куда оптимальнее вынести defaultFilter
+//1. Куда оптимальнее вынести defaultFilter 
 //2. Можно ли как-то упростить выбор уникальных стилей?
 const defaultFilter = beerData
   .map((item) => item.style)
   .filter((item, i, arr) => arr.indexOf(item) === i)
   .reduce((obj, item) => ({ ...obj, [item]: false }), { all: true });
+
+//3. Куда оптимальнее вынести filterView
+const filterView = ({name, style}, filter, keyword) => {
+  if (filter.all) {
+    return formatStr(name).includes(keyword);
+  }
+
+  for (let key in filter) {
+    if (filter[key] && key === style) {
+      return formatStr(name).includes(keyword);
+    }
+  }
+}
 
 class App extends Component {
   constructor() {
@@ -41,6 +54,7 @@ class App extends Component {
   };
 
   handleSearch = (str) => this.setState({ search: formatStr(str) });
+
   handleFilter = ({ name, checked }) => {
     name === "all"
       ? this.setState({ filter: defaultFilter })
@@ -56,16 +70,8 @@ class App extends Component {
   };
 
   render() {
-    const beerList = this.state.beerArr.filter((beer) => {
-        if (this.state.filter.all) {
-          return beer.name.toLowerCase().includes(this.state.search);
-        }
-        for (let key in this.state.filter) {
-          if (this.state.filter[key] && key === beer.style) {
-            return beer.name.toLowerCase().includes(this.state.search);
-          }
-        }
-      })
+    const beerList = this.state.beerArr
+      .filter((beer) => filterView(beer, this.state.filter, this.state.search))
       .map((beer) => {
         const { myRating, ratings } = beer;
         const avgRating = getAvg(myRating ? [...ratings, myRating] : ratings);
