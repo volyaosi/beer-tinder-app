@@ -21,6 +21,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      beerArr: beerData,
       search: "",
       filter: defaultFilter,
     };
@@ -55,13 +56,11 @@ class App extends Component {
   };
 
   render() {
-    const beerList = beerData.filter((beer) => {
+    const beerList = this.state.beerArr.filter((beer) => {
         if (this.state.filter.all) {
           return beer.name.toLowerCase().includes(this.state.search);
         }
         for (let key in this.state.filter) {
-          // console.log(key, beer.style);
-
           if (this.state.filter[key] && key === beer.style) {
             return beer.name.toLowerCase().includes(this.state.search);
           }
