@@ -1,13 +1,17 @@
 import React from "react";
 
-import {Filter} from "../Rating/Rating";
+import { Filter } from "../Filter/Filter";
 
-
-
-const ViewControls = ({ styleArr, handleFilter, handleSearch}) => {
+export const ViewControls = ({ filterObj, handleFilter, handleSearch }) => {
   return (
-    <input type="text" name="search" placeholder="Search" onChange={(e) => handleSearch(e.target.value)}/>
-  )
-}
-
-export default ViewControls;
+    <div className="view-controls">
+      <input
+        type="text"
+        name="search"
+        placeholder="Search"
+        onChange={(e) => handleSearch(e.target.value)}
+      />
+      <Filter filterObj={filterObj} handleFilter={handleFilter} />
+    </div>
+  );
+};

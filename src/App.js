@@ -2,23 +2,22 @@ import React, { Component } from "react";
 import "./App.css";
 
 import BeerCard from "./components/BeerCard/BeerCard";
-import ViewControls from "./components/ViewControls/ViewControls";
+import { ViewControls } from "./components/ViewControls/ViewControls";
 import beerData from "./beerData.js";
 
 const MAX_RATING = 5;
 const getAvg = (ratings) => ratings.reduce((a, b) => a + b) / ratings.length;
-const formatStr = str => str.toLowerCase().trim();
+const formatStr = (str) => str.toLowerCase().trim();
 
-
-// нужна помощь: 
-//1. Куда оптимальнее вынести defaultFilter 
+// нужна помощь:
+//1. Куда оптимальнее вынести defaultFilter
 //2. Можно ли как-то упростить выбор уникальных стилей?
-const defaultFilter = beerData.map(item => item.style)
-.filter((item, i, arr) => arr.indexOf(item) === i)
-.reduce((obj, item) => ({ ...obj, [item]: false}), {all: true})
+const defaultFilter = beerData
+  .map((item) => item.style)
+  .filter((item, i, arr) => arr.indexOf(item) === i)
+  .reduce((obj, item) => ({ ...obj, [item]: false }), { all: true });
 
 class App extends Component {
-
   constructor() {
     super();
     this.state = {
@@ -40,10 +39,34 @@ class App extends Component {
     });
   };
 
-  handleSearch = (str) => this.setState({ search: formatStr( str ) });
+  handleSearch = (str) => this.setState({ search: formatStr(str) });
+  handleFilter = ({ name, checked }) => {
+    name === "all"
+      ? this.setState({ filter: defaultFilter })
+      : this.setState((prevState) => {
+          return {
+            filter: {
+              ...prevState.filter,
+              all: false,
+              [name]: checked,
+            },
+          };
+        });
+  };
 
   render() {
-    const beerList = beerData.filter((beer) => formatStr(beer.name).includes(this.state.search))
+    const beerList = beerData.filter((beer) => {
+        if (this.state.filter.all) {
+          return beer.name.toLowerCase().includes(this.state.search);
+        }
+        for (let key in this.state.filter) {
+          // console.log(key, beer.style);
+
+          if (this.state.filter[key] && key === beer.style) {
+            return beer.name.toLowerCase().includes(this.state.search);
+          }
+        }
+      })
       .map((beer) => {
         const { myRating, ratings } = beer;
         const avgRating = getAvg(myRating ? [...ratings, myRating] : ratings);
@@ -57,18 +80,16 @@ class App extends Component {
             maxRating={MAX_RATING}
           />
         );
-    });
+      });
 
     return (
       <main className="App">
         <h1 className="beer-list__header">Beer List</h1>
-        <div className="view-controls">
-          <ViewControls 
-            styleArr={Object.entries(this.state.filter)}
-            handleFilter={this.handleFilter}
-            handleSearch={this.handleSearch}
-          />
-        </div>
+        <ViewControls
+          filterObj={this.state.filter}
+          handleFilter={this.handleFilter}
+          handleSearch={this.handleSearch}
+        />
         <div className="beer-list__container">{beerList}</div>
       </main>
     );
