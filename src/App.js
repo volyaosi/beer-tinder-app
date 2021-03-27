@@ -5,14 +5,17 @@ import BeerCard from "./components/BeerCard/BeerCard";
 import beerData from "./beerData.js";
 
 const MAX_RATING = 5;
-
 const getAvg = (ratings) => ratings.reduce((a, b) => a + b) / ratings.length;
+const defaultStyles = beerData.map(item => item.style)
+                                 .filter((item, i, arr) => arr.indexOf(item) === i)
+                                 .reduce((obj, item) => ({ ...obj, [item]: false}), {all: true})
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      beerArr: beerData,
+      search: "",
+      filter: defaultStyles,
     };
   }
 
@@ -27,27 +30,41 @@ class App extends Component {
 
       return updatedBeerArr;
     });
-  }
+  };
+
+  handleSearch = (e) => {
+    const keyword = e.target.value.toLowerCase().trim();
+    this.setState({search:keyword})
+  };
+
 
   render() {
-    const beerList = this.state.beerArr.map((beer) => {
-      const {myRating, ratings} = beer;
-      const avgRating = getAvg(myRating ? [...ratings, myRating] : ratings)
+    const beerList = beerData.filter((beer) => beer.name.toLowerCase().includes(this.state.search))
+      .map((beer) => {
+        const { myRating, ratings } = beer;
+        const avgRating = getAvg(myRating ? [...ratings, myRating] : ratings);
 
-      return (
-        <BeerCard
-          key={beer.id}
-          {...beer}
-          avgRating={avgRating}
-          handleRate={this.handleRate}
-          maxRating={MAX_RATING}
-        />
-      );
+        return (
+          <BeerCard
+            key={beer.id}
+            {...beer}
+            avgRating={avgRating}
+            handleRate={this.handleRate}
+            maxRating={MAX_RATING}
+          />
+        );
     });
 
     return (
       <main className="App">
         <h1 className="beer-list__header">Beer List</h1>
+        <div>
+          <input
+            type="text"
+            placeholder="Search"
+            onChange={this.handleSearch}
+          />
+        </div>
         <div className="beer-list__container">{beerList}</div>
       </main>
     );
