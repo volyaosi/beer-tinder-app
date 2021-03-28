@@ -4,7 +4,7 @@ import {Rating} from "../Rating/Rating";
 
 import "./BeerCard.css";
 
-const BeerCard = ({ id, name, myRating, avgRating, brewery, src, handleRate, maxRating }) => {
+const BeerCard = ({ id, name, style, myRating, avgRating, brewery, src, handleRate, maxRating }) => {
   
   const ratingProps = { id, myRating, avgRating, maxRating, handleRate };
 
@@ -18,6 +18,7 @@ const BeerCard = ({ id, name, myRating, avgRating, brewery, src, handleRate, max
       <div className="card__content">
         <h2 className="card__title">{name}</h2>
         <p className="card__subtitle">{brewery}</p>
+        <p className="card__subtitle">{style.toUpperCase()}</p>
         <Rating {...ratingProps}/>
       </div>
     </div>

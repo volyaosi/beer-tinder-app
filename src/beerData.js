@@ -29,9 +29,9 @@ const beerData = [
     {
         id: 4,
         name: 'Лоботомия',
-        brewery: 'AFBrew',
+        brewery: 'Af Brew',
         style: 'stout',
-        src: 'https://untappd.akamaized.net/site/beer_logos/beer-3944521_90849_sm.jpeg',
+        src: 'https://untappd.akamaized.net/site/beer_logos/beer-4008262_b355f_sm.jpeg',
         ratings: [2,4,3],
         myRating: 0
     },
@@ -40,14 +40,14 @@ const beerData = [
         name: 'Bourbon Stout',
         brewery: 'Goose Island',
         style: 'stout',
-        src: 'https://untappd.akamaized.net/site/beer_logos/beer-3944521_90849_sm.jpeg',
+        src: 'https://untappd.akamaized.net/site/beer_logos/beer-3136888_aa0ab_sm.jpeg',
         ratings: [2,4,3],
         myRating: 0
     },
     {
         id: 6,
-        name: 'OroNegro',
-        brewery: 'Jekky O`z',
+        name: 'Oro Negro',
+        brewery: 'Jackie O`s',
         style: 'ipa',
         src: 'https://untappd.akamaized.net/site/beer_logos/beer-3944521_90849_sm.jpeg',
         ratings: [2,4,3],
@@ -56,9 +56,9 @@ const beerData = [
     {
         id: 7,
         name: 'Dessert in can',
-        brewery: 'Amundsen Brewery',
+        brewery: 'Amundsen Bryggeri',
         style: 'other',
-        src: 'https://untappd.akamaized.net/site/beer_logos/beer-3944521_90849_sm.jpeg',
+        src: 'https://untappd.akamaized.net/site/beer_logos/beer-4008262_b355f_sm.jpeg',
         ratings: [2,4,3],
         myRating: 0
     },
