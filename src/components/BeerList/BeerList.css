@@ -1,29 +1,11 @@
-.card {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.3);
-    background: #fff;
-    margin: 15px auto;
-    max-width: 500px;
-    padding: 20px 15px;
-}
-
-.card__image {
+.loadBtn {
+    display: block;
+    margin: 0 auto;
+    padding: 10px;
     width: 100px;
-    height: 100px;
+    background-color: #777;
 }
 
-.card__content {
-    width: 70%;
-}
-
-.card__title {
-    font-family: sans-serif;
-    text-transform: uppercase;
-}
-
-.card__subtitle {
-    color: rgb(100, 100, 100);
-    font-size: 0.9rem;
+.loadBtn_hidden {
+    display: none;
 }

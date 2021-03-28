@@ -55,7 +55,7 @@ class App extends Component {
     });
   };
 
-  handleSearch = (str) => this.setState({ search: formatStr(str) });
+  handleSearch = (str) => this.setState({ search: formatStr(str), lastItem: ITEMS_PER_PAGE });
 
   loadMoreItems = () => {
     this.setState(({ lastItem }) => {
@@ -67,9 +67,10 @@ class App extends Component {
 
   handleFilter = ({ name, checked }) => {
     name === "all"
-      ? this.setState({ filter: defaultFilter })
+      ? this.setState({ filter: defaultFilter, lastItem: ITEMS_PER_PAGE })
       : this.setState((prevState) => {
           return {
+            lastItem: ITEMS_PER_PAGE,
             filter: {
               ...prevState.filter,
               all: false,
