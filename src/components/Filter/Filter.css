@@ -4,6 +4,18 @@
     flex-direction: column;
 }
 
-.filter__item {
+.filter__checkbox {
     margin-right: 5px;
+}
+
+
+@media only screen and (max-width: 1200px) {
+    .filter {
+        flex-direction: row;
+        justify-content: end;
+    }
+
+    .filter__item {
+        margin-left: 15px;
+    }
 }
