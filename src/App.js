@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import cx from "classnames";
 
-import BeerCard from "./components/BeerCard/BeerCard";
+import BeerList from "./components/BeerList/BeerList";
 import { ViewControls } from "./components/ViewControls/ViewControls";
 import beerData from "./beerData.js";
 
@@ -9,7 +8,6 @@ import "./App.css";
 
 const MAX_RATING = 5;
 const ITEMS_PER_PAGE = 3;
-const getAvg = (ratings) => ratings.reduce((a, b) => a + b) / ratings.length;
 const formatStr = (str) => str.toLowerCase().trim();
 
 // нужна помощь:
@@ -58,9 +56,9 @@ class App extends Component {
   };
 
   handleSearch = (str) => this.setState({ search: formatStr(str) });
+
   loadMoreItems = () => {
     this.setState(({ lastItem }) => {
-      console.log(lastItem + ITEMS_PER_PAGE);
       return {
         lastItem: lastItem + ITEMS_PER_PAGE,
       };
@@ -82,24 +80,9 @@ class App extends Component {
   };
 
   render() {
-    const totalBeerList = this.state.beerArr.filter((beer) =>
+    const beerList = this.state.beerArr.filter((beer) =>
       filterView(beer, this.state.filter, this.state.search)
     );
-
-    const beerList = totalBeerList.slice(0, this.state.lastItem).map((beer) => {
-      const { myRating, ratings } = beer;
-      const avgRating = getAvg(myRating ? [...ratings, myRating] : ratings);
-
-      return (
-        <BeerCard
-          key={beer.id}
-          {...beer}
-          avgRating={avgRating}
-          handleRate={this.handleRate}
-          maxRating={MAX_RATING}
-        />
-      );
-    });
 
     return (
       <main className="App">
@@ -109,17 +92,13 @@ class App extends Component {
           handleFilter={this.handleFilter}
           handleSearch={this.handleSearch}
         />
-        <div className="beer-list__container">
-          {beerList}
-          <button
-            onClick={this.loadMoreItems}
-            className={cx("loadBtn", {
-              loadBtn_hidden: this.state.lastItem >= totalBeerList.length
-            })}
-          >
-            Load more
-          </button>
-        </div>
+        <BeerList
+          beers={beerList}
+          lastItem={this.state.lastItem}
+          handleRate={this.handleRate}
+          maxRating={MAX_RATING}
+          loadMoreItems={this.loadMoreItems}
+        />
       </main>
     );
   }
